@@ -1,0 +1,275 @@
+using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
+
+public class CreatureController : MonoBehaviour
+{
+    [Header("AI Settings")]
+    [SerializeField] private bool isMelee = true;
+    [SerializeField] private float detectionRange = 10f;
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float rangedOptimalDistance = 5f;
+    [SerializeField] private float stoppingDistance = 1.5f;
+
+    [Header("Combat Settings")]
+    [SerializeField] private CreatureProjectile projectilePrefab;
+    [SerializeField] private Transform projectileSpawnPoint;
+
+    [Header("Enemy Stats")]
+    [SerializeField] private float health;
+    [SerializeField] private float attackDamage;
+    [SerializeField] private float speed;
+    [SerializeField] private float attackSpeed;
+
+    private NavMeshAgent navMeshAgent;
+    private Transform currentTarget;
+    private bool isInCombat = false;
+    private float lastAttackTime = 0f;
+
+    private void Awake()
+    {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        SetupNavMeshAgent();
+    }
+
+    private void SetupNavMeshAgent()
+    {
+        if (navMeshAgent != null)
+        {
+            navMeshAgent.speed = speed;
+            navMeshAgent.stoppingDistance = stoppingDistance;
+            navMeshAgent.angularSpeed = 360f;
+            navMeshAgent.acceleration = 8f;
+        }
+    }
+
+    private void Update()
+    {
+        if (health <= 0) return;
+
+        FindTarget();
+        HandleCombatBehavior();
+    }
+
+    private void FindTarget()
+    {
+        if (currentTarget != null)
+        {
+            PlayerController targetPlayer = currentTarget.GetComponent<PlayerController>();
+            if (targetPlayer == null || targetPlayer.health <= 0)
+            {
+                currentTarget = null;
+                isInCombat = false;
+            }
+        }
+
+        if (currentTarget == null)
+        {
+            LayerMask targetLayerMask = LayerMask.GetMask("Player");
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRange, targetLayerMask);
+            float closestDistance = Mathf.Infinity;
+            Transform closestTarget = null;
+
+            foreach (var hitCollider in hitColliders)
+            {
+                PlayerController potentialPlayer = hitCollider.GetComponent<PlayerController>();
+                bool isValid = potentialPlayer != null && potentialPlayer.health > 0;
+
+                if (isValid)
+                {
+                    float distance = Vector3.Distance(transform.position, hitCollider.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestTarget = hitCollider.transform;
+                    }
+                }
+            }
+
+            if (closestTarget != null)
+            {
+                currentTarget = closestTarget;
+                isInCombat = true;
+            }
+            else
+            {
+                isInCombat = false;
+            }
+        }
+    }
+
+    private void HandleCombatBehavior()
+    {
+        if (!isInCombat || currentTarget == null)
+        {
+            if (navMeshAgent.isActiveAndEnabled)
+                navMeshAgent.isStopped = true;
+            return;
+        }
+
+        float distanceToTarget = Vector3.Distance(transform.position, currentTarget.position);
+
+        if (isMelee)
+            HandleMeleeCombat(distanceToTarget);
+        else
+            HandleRangedCombat(distanceToTarget);
+    }
+
+    private void HandleMeleeCombat(float distanceToTarget)
+    {
+        if (distanceToTarget <= attackRange)
+        {
+            if (navMeshAgent.isActiveAndEnabled)
+                navMeshAgent.isStopped = true;
+
+            TryAttack();
+        }
+        else
+        {
+            if (navMeshAgent.isActiveAndEnabled && currentTarget != null)
+            {
+                navMeshAgent.isStopped = false;
+                navMeshAgent.SetDestination(currentTarget.position);
+            }
+        }
+    }
+
+    private void HandleRangedCombat(float distanceToTarget)
+    {
+        if (distanceToTarget <= attackRange && distanceToTarget >= rangedOptimalDistance * 0.8f)
+        {
+            if (navMeshAgent.isActiveAndEnabled)
+                navMeshAgent.isStopped = true;
+
+            TryAttack();
+        }
+        else if (distanceToTarget < rangedOptimalDistance * 0.8f)
+        {
+            if (navMeshAgent.isActiveAndEnabled && currentTarget != null)
+            {
+                navMeshAgent.isStopped = false;
+                Vector3 directionAway = (transform.position - currentTarget.position).normalized;
+                navMeshAgent.SetDestination(transform.position + directionAway * rangedOptimalDistance);
+            }
+        }
+        else
+        {
+            if (navMeshAgent.isActiveAndEnabled && currentTarget != null)
+            {
+                navMeshAgent.isStopped = false;
+                Vector3 directionToTarget = (currentTarget.position - transform.position).normalized;
+                navMeshAgent.SetDestination(currentTarget.position - directionToTarget * rangedOptimalDistance);
+            }
+        }
+    }
+
+    private void TryAttack()
+    {
+        if (Time.time >= lastAttackTime + 1f / attackSpeed)
+        {
+            Attack();
+            lastAttackTime = Time.time;
+        }
+    }
+
+    private void Attack()
+    {
+        if (isMelee)
+            PerformMeleeAttack();
+        else
+            PerformRangedAttack();
+    }
+
+    private void PerformMeleeAttack()
+    {
+        if (currentTarget == null) return;
+
+        PlayerController targetPlayer = currentTarget.GetComponent<PlayerController>();
+        if (targetPlayer != null)
+            targetPlayer.TakeDamage(attackDamage);
+
+        StartCoroutine(MeleeAttackAnimation());
+    }
+
+    private void PerformRangedAttack()
+    {
+        if (currentTarget == null) return;
+
+        if (projectilePrefab != null)
+        {
+            CreatureProjectile projectile = Instantiate(
+                projectilePrefab,
+                projectileSpawnPoint != null ? projectileSpawnPoint.position : transform.position,
+                Quaternion.identity
+            );
+            projectile.Initialize(attackDamage, currentTarget);
+        }
+        else
+        {
+            // Fallback: direct damage if no projectile prefab assigned
+            PlayerController targetPlayer = currentTarget.GetComponent<PlayerController>();
+            if (targetPlayer != null)
+                targetPlayer.TakeDamage(attackDamage);
+        }
+    }
+
+    private IEnumerator MeleeAttackAnimation()
+    {
+        Vector3 originalPosition = transform.position;
+        if (currentTarget != null)
+        {
+            Vector3 attackDirection = (currentTarget.position - transform.position).normalized * 0.3f;
+            float attackTime = 0.1f;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < attackTime)
+            {
+                transform.position = Vector3.Lerp(originalPosition, originalPosition + attackDirection, elapsedTime / attackTime);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            elapsedTime = 0f;
+            while (elapsedTime < attackTime)
+            {
+                transform.position = Vector3.Lerp(originalPosition + attackDirection, originalPosition, elapsedTime / attackTime);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            transform.position = originalPosition;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        if (!isMelee)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, rangedOptimalDistance);
+        }
+
+        if (currentTarget != null)
+        {
+            Gizmos.color = isInCombat ? Color.red : Color.green;
+            Gizmos.DrawLine(transform.position, currentTarget.position);
+        }
+    }
+
+    // Public API
+    public void SetTarget(Transform target)
+    {
+        currentTarget = target;
+        isInCombat = target != null;
+    }
+
+    public bool IsInCombat() => isInCombat;
+
+    public Transform GetCurrentTarget() => currentTarget;
+}

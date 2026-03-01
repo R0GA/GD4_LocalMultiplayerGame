@@ -16,9 +16,10 @@ public class PlayerController : MonoBehaviour
     [Header("Player Settings")]
     [SerializeField] private bool isP1;
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float lookSpeed = 50f;
+    //[SerializeField] private float lookSpeed = 50f;
     private Vector2 moveInput;
     private Vector3 lookInput;
+    public float health = 100f;
 
     private void Start()
     {
@@ -27,8 +28,9 @@ public class PlayerController : MonoBehaviour
 
         playerInput.actions["Movement"].canceled += ctx => moveInput = Vector2.zero;
         playerInput.actions["Look"].canceled += ctx => lookInput = Vector2.zero;
+
+        playerInput.actions["Attack"].performed += ctx => Attack();
     }
-    
 
     private void Update()
     {
@@ -45,7 +47,27 @@ public class PlayerController : MonoBehaviour
     }
     public void Look()
     {
-        float lookX = lookInput.x * lookSpeed * Time.deltaTime;
-        otherPlayer.Rotate(0, lookX, 0);
+        if (lookInput.sqrMagnitude > 0.01f)
+        {
+            Vector3 lookDir = new Vector3(lookInput.x, 0f, lookInput.y);
+            otherPlayer.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        }
+    }
+    public void Attack()
+    {
+        // Implement attack logic here
+    }
+
+public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+    private void Die()
+    {
+        // Implement death logic here (e.g., disable player, play animation, etc.)
     }
 }
