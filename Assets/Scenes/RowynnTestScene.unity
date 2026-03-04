@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 194103974}
   - component: {fileID: 194103973}
   m_Layer: 6
-  m_Name: Player 2
+  m_Name: Lightning Wizard (p2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -189,6 +189,10 @@ MonoBehaviour:
   isP1: 0
   moveSpeed: 5
   health: 100
+  fireballPrefab: {fileID: 0}
+  fireballSpawnPoint: {fileID: 0}
+  fireballCooldown: 0.5
+  lightningAttack: {fileID: 0}
 --- !u!143 &194103975
 CharacterController:
   m_ObjectHideFlags: 0
@@ -451,7 +455,7 @@ GameObject:
   - component: {fileID: 330118080}
   - component: {fileID: 330118079}
   - component: {fileID: 330118078}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -481,6 +485,8 @@ MonoBehaviour:
   attackDamage: 5
   speed: 5
   attackSpeed: 5
+  deathVFXPrefab: {fileID: 0}
+  deathVFXDuration: 2
 --- !u!195 &330118079
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -613,7 +619,7 @@ GameObject:
   - component: {fileID: 516334302}
   - component: {fileID: 516334303}
   m_Layer: 6
-  m_Name: Player 1
+  m_Name: Fire Wizard (p1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -758,6 +764,10 @@ MonoBehaviour:
   isP1: 1
   moveSpeed: 5
   health: 100
+  fireballPrefab: {fileID: 1756807929882960350, guid: 9b36f6ca12eddb741ae19c1d2f410372, type: 3}
+  fireballSpawnPoint: {fileID: 607034788}
+  fireballCooldown: 0.5
+  lightningAttack: {fileID: 0}
 --- !u!114 &516334303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1299,7 +1309,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 680734375}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

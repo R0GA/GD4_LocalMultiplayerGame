@@ -21,10 +21,15 @@ public class CreatureController : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float attackSpeed;
 
+    [Header("Death VFX")]
+    [SerializeField] private GameObject deathVFXPrefab;
+    [SerializeField] private float deathVFXDuration = 2f;
+
     private NavMeshAgent navMeshAgent;
     private Transform currentTarget;
     private bool isInCombat = false;
     private float lastAttackTime = 0f;
+    private bool isDead = false;
 
     private void Awake()
     {
@@ -45,7 +50,7 @@ public class CreatureController : MonoBehaviour
 
     private void Update()
     {
-        if (health <= 0) return;
+        if (isDead || health <= 0) return;
 
         FindTarget();
         HandleCombatBehavior();
@@ -206,7 +211,6 @@ public class CreatureController : MonoBehaviour
         }
         else
         {
-            // Fallback: direct damage if no projectile prefab assigned
             PlayerController targetPlayer = currentTarget.GetComponent<PlayerController>();
             if (targetPlayer != null)
                 targetPlayer.TakeDamage(attackDamage);
@@ -241,6 +245,44 @@ public class CreatureController : MonoBehaviour
         }
     }
 
+    public void TakeDamage(float damage)
+    {
+        if (isDead) return;
+
+        health -= damage;
+        if (health <= 0)
+            Die();
+    }
+
+    private void Die()
+    {
+        if (isDead) return;
+        isDead = true;
+
+        if (navMeshAgent != null && navMeshAgent.isActiveAndEnabled)
+        {
+            navMeshAgent.isStopped = true;
+            navMeshAgent.enabled = false;
+        }
+
+        if (deathVFXPrefab != null)
+        {
+            GameObject vfx = Instantiate(deathVFXPrefab, transform.position, Quaternion.identity);
+            Destroy(vfx, deathVFXDuration);
+        }
+
+        Destroy(gameObject, 0.1f);
+    }
+
+    public void SetTarget(Transform target)
+    {
+        currentTarget = target;
+        isInCombat = target != null;
+    }
+
+    public bool IsInCombat() => isInCombat;
+    public Transform GetCurrentTarget() => currentTarget;
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
@@ -261,15 +303,4 @@ public class CreatureController : MonoBehaviour
             Gizmos.DrawLine(transform.position, currentTarget.position);
         }
     }
-
-    // Public API
-    public void SetTarget(Transform target)
-    {
-        currentTarget = target;
-        isInCombat = target != null;
-    }
-
-    public bool IsInCombat() => isInCombat;
-
-    public Transform GetCurrentTarget() => currentTarget;
 }
