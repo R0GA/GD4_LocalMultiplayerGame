@@ -27,6 +27,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 lookInput;
     private float lastFireballTime = -999f;
 
+    [Header("UI")]
+    [SerializeField] private HealthBar healthBar;
+
     private void Start()
     {
         playerInput.actions["Movement"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
@@ -103,6 +106,8 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
+        healthBar.UpdateHealthBar(health);
+
         if (health <= 0)
             Die();
     }
