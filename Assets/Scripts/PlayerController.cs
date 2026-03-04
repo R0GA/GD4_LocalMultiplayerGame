@@ -49,8 +49,8 @@ public class PlayerController : MonoBehaviour
 
     public void Movement()
     {
-        Vector3 move = new Vector3(-moveInput.y, 0, moveInput.x);
-        move = transform.TransformDirection(move);
+        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
+        //move = transform.TransformDirection(move);
         charControl.Move(move * moveSpeed * Time.deltaTime);
     }
 
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
         aimDirection.y = 0f;
         aimDirection.Normalize();
 
-        Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : otherPlayer.position + Vector3.up * 0.5f;
+        Vector3 spawnPos = fireballSpawnPoint != null ? fireballSpawnPoint.position : transform.position + Vector3.up * 0.5f;
         Quaternion spawnRot = Quaternion.LookRotation(aimDirection);
 
         FireballProjectile fb = Instantiate(fireballPrefab, spawnPos, spawnRot);
