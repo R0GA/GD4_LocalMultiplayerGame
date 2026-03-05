@@ -58,7 +58,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: beea58039d25dbd498e238612fa02294, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -997,8 +997,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37afdf3fba8cad3468e61116e7988d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LightningAttack
-  aimRange: 12
-  aimFOV: 30
+  aimRange: 10
+  aimFOV: 15
   chainRadius: 5
   chainDamageMultiplier: 0.6
   primaryDamage: 30
@@ -1069,7 +1069,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: beea58039d25dbd498e238612fa02294, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
