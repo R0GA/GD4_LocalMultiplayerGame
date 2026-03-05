@@ -59,7 +59,8 @@ public class FireballProjectile : MonoBehaviour
 
         if (explosionVFXPrefab != null)
         {
-            GameObject vfx = Instantiate(explosionVFXPrefab, center, Quaternion.identity);
+            Quaternion rotation = Quaternion.Euler(-90f, 0f, 0f);
+            GameObject vfx = Instantiate(explosionVFXPrefab, center, rotation);
             Destroy(vfx, explosionVFXDuration);
         }
 

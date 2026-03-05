@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,10 +11,11 @@ public class PlayerController : MonoBehaviour
     [Header("Player References")]
     [SerializeField] private CharacterController charControl;
     [SerializeField] private Transform otherPlayer;
+    [SerializeField] private Animator animator;
 
     [Header("Player Settings")]
     [SerializeField] private bool isP1; // P1 = Fire Wizard, P2 = Lightning Wizard
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] public float moveSpeed = 5f;
     public float health = 100f;
 
     [Header("Attack Settings - Fire Wizard (P1)")]
@@ -26,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private Vector3 lookInput;
     private float lastFireballTime = -999f;
+    private bool isAttacking;   
 
     [Header("UI")]
     [SerializeField] private HealthBar healthBar;
@@ -52,6 +56,16 @@ public class PlayerController : MonoBehaviour
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
         //move = transform.TransformDirection(move);
         charControl.Move(move * moveSpeed * Time.deltaTime);
+        
+        if (!isAttacking && charControl.velocity.magnitude > 0.1f)
+        {
+            animator.SetInteger("AnimState", 1);
+        }
+        else if (!isAttacking)
+        {
+            animator.SetInteger("AnimState", 0);
+        }
+
     }
 
     public void Look()
@@ -68,9 +82,18 @@ public class PlayerController : MonoBehaviour
         if (health <= 0) return;
 
         if (isP1)
+        {
             FireWizardAttack();
+            isAttacking = true;
+            animator.SetInteger("AnimState", 2);
+
+        }
         else
+        {
             LightningWizardAttack();
+            isAttacking= true;
+            animator.SetInteger("AnimState", 2);
+        }
     }
 
     private void FireWizardAttack()
@@ -89,6 +112,7 @@ public class PlayerController : MonoBehaviour
         fb.Launch(aimDirection);
 
         lastFireballTime = Time.time;
+        StartCoroutine(ResetAttack());
     }
 
     private void LightningWizardAttack()
@@ -101,6 +125,7 @@ public class PlayerController : MonoBehaviour
         aimDirection.Normalize();
 
         lightningAttack.Fire(transform.position, aimDirection);
+        StartCoroutine(ResetAttack());
     }
 
     public void TakeDamage(float damage)
@@ -111,10 +136,15 @@ public class PlayerController : MonoBehaviour
         if (health <= 0)
             Die();
     }
+    private IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(0.5f);
+        isAttacking = false;
+    }
 
     private void Die()
     {
-        //Add death stuff Rowynn, dont be lazy
+        //Add death stuff here
         Debug.Log($"{gameObject.name} has died.");
     }
 }
