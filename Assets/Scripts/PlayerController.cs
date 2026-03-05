@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Settings")]
     [SerializeField] private bool isP1; // P1 = Fire Wizard, P2 = Lightning Wizard
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] public float moveSpeed = 5f;
     public float health = 100f;
 
     [Header("Attack Settings - Fire Wizard (P1)")]

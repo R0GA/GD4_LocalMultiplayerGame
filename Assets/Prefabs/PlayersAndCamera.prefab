@@ -1002,7 +1002,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LightningAttack
   aimRange: 10
-  aimFOV: 15
+  aimFOV: 20
   chainRadius: 5
   chainDamageMultiplier: 0.6
   primaryDamage: 30
