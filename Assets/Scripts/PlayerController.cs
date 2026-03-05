@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
-        //Add death stuff Rowynn, dont be lazy
+        //Add death stuff here
         Debug.Log($"{gameObject.name} has died.");
     }
 }
