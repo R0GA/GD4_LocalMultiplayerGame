@@ -158,7 +158,7 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 6906441205220010624}
   health: 100
   attackDamage: 5
-  speed: 5
+  speed: 1
   attackSpeed: 5
   deathVFXPrefab: {fileID: 0}
   deathVFXDuration: 2
