@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CharacterController charControl;
     [SerializeField] private Transform otherPlayer;
     [SerializeField] private Animator animator;
+    [SerializeField] private Transform model;
 
     [Header("Player Settings")]
     [SerializeField] private bool isP1; // P1 = Fire Wizard, P2 = Lightning Wizard
@@ -56,7 +57,14 @@ public class PlayerController : MonoBehaviour
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
         //move = transform.TransformDirection(move);
         charControl.Move(move * moveSpeed * Time.deltaTime);
-        
+        model.transform.position = transform.position;
+
+        if (moveInput.sqrMagnitude > 0.1f)
+        {
+            Vector3 lookDir = new Vector3(moveInput.x, 0f, moveInput.y);
+            model.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        }
+
         if (!isAttacking && charControl.velocity.magnitude > 0.1f)
         {
             animator.SetInteger("AnimState", 1);
