@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
         //move = transform.TransformDirection(move);
         charControl.Move(move * moveSpeed * Time.deltaTime);
+        model.transform.position = transform.position;
 
         if (moveInput.sqrMagnitude > 0.1f)
         {
