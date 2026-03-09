@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     }
     public void ReturnToMainMenu()
     {
-        LoadLevel("MainMenu");
+        LoadLevel("Start");
     }
     public void EndLevel()
     {
@@ -62,11 +62,11 @@ public class GameManager : MonoBehaviour
 
         if(player1.isPaused)
         {
-            player1.OnPause();
+            player1.ResumeGame();
         }
         else
         {
-            player2.OnPause();
+            player2.ResumeGame();
         }
     }
 }
