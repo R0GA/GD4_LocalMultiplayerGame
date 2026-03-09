@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Renderer modelRenderer;
 
     [Header("Player Settings")]
-    [SerializeField] private bool isP1; // P1 = Fire Wizard, P2 = Lightning Wizard
+    [SerializeField] public bool isP1; // P1 = Fire Wizard, P2 = Lightning Wizard
     [SerializeField] public float moveSpeed = 5f;
     public float maxHealth = 100f;
     public float health = 100f;
