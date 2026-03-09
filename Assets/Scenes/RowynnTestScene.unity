@@ -474,6 +474,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HazardScript
   slowAmount: 2
+  isLethal: 1
+  damage: 10
+  damageSpeed: 0.5
 --- !u!1 &178089836
 GameObject:
   m_ObjectHideFlags: 0

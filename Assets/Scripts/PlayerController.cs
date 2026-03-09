@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform otherPlayer;
     [SerializeField] private Animator animator;
     [SerializeField] private Transform model;
+    [SerializeField] private Material baseMat;
+    [SerializeField] private Material hurtMat;
+    [SerializeField] private Renderer modelRenderer;
 
     [Header("Player Settings")]
     [SerializeField] private bool isP1; // P1 = Fire Wizard, P2 = Lightning Wizard
@@ -34,13 +37,16 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private Vector3 lookInput;
     private float lastFireballTime = -999f;
-    private bool isAttacking;   
+    private bool isAttacking;
+    private float baseSpeed;
 
     [Header("UI")]
     [SerializeField] private HealthBar healthBar;
 
     private void Start()
     {
+        baseSpeed = moveSpeed;
+
         playerInput.actions["Movement"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         playerInput.actions["Look"].performed += ctx => lookInput = ctx.ReadValue<Vector2>();
 
@@ -58,26 +64,28 @@ public class PlayerController : MonoBehaviour
 
     public void Movement()
     {
-        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
-        //move = transform.TransformDirection(move);
-        charControl.Move(move * moveSpeed * Time.deltaTime);
-        model.transform.position = transform.position;
-
-        if (moveInput.sqrMagnitude > 0.1f)
+        if (!isDead)
         {
-            Vector3 lookDir = new Vector3(moveInput.x, 0f, moveInput.y);
-            model.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
-        }
+            Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
+            //move = transform.TransformDirection(move);
+            charControl.Move(move * moveSpeed * Time.deltaTime);
+            model.transform.position = transform.position;
 
-        if (!isAttacking && charControl.velocity.magnitude > 0.1f)
-        {
-            animator.SetInteger("AnimState", 1);
-        }
-        else if (!isAttacking)
-        {
-            animator.SetInteger("AnimState", 0);
-        }
+            if (moveInput.sqrMagnitude > 0.1f)
+            {
+                Vector3 lookDir = new Vector3(moveInput.x, 0f, moveInput.y);
+                model.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+            }
 
+            if (!isAttacking && charControl.velocity.magnitude > 0.1f)
+            {
+                animator.SetInteger("AnimState", 1);
+            }
+            else if (!isAttacking)
+            {
+                animator.SetInteger("AnimState", 0);
+            }
+        }
     }
 
     public void Look()
@@ -91,20 +99,23 @@ public class PlayerController : MonoBehaviour
 
     public void Attack()
     {
-        if (health <= 0) return;
-
-        if (isP1)
+        if (!isDead)
         {
-            FireWizardAttack();
-            isAttacking = true;
-            animator.SetInteger("AnimState", 2);
+            if (health <= 0) return;
 
-        }
-        else
-        {
-            LightningWizardAttack();
-            isAttacking= true;
-            animator.SetInteger("AnimState", 2);
+            if (isP1)
+            {
+                FireWizardAttack();
+                isAttacking = true;
+                animator.SetInteger("AnimState", 2);
+
+            }
+            else
+            {
+                LightningWizardAttack();
+                isAttacking = true;
+                animator.SetInteger("AnimState", 2);
+            }
         }
     }
 
@@ -142,6 +153,9 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if(isDead) return;
+
+        StartCoroutine(FlashHurtMaterial());
         health -= damage;
         UpdateHealthUI();
 
@@ -165,25 +179,34 @@ public class PlayerController : MonoBehaviour
             healthAnim.SetInteger("AnimState", 2);
         }
     }
+    private IEnumerator FlashHurtMaterial()
+    {
+        modelRenderer.material = hurtMat;
+        yield return new WaitForSeconds(0.2f);
+        modelRenderer.material = baseMat;
+    }
     private IEnumerator ResetAttack()
     {
         yield return new WaitForSeconds(0.5f);
         isAttacking = false;
     }
-
     private void Die()
     {
-        //Add death stuff here
         isDead = true;
         Debug.Log($"{gameObject.name} has died.");
+        animator.SetInteger("AnimState", 0);
+        model.gameObject.transform.rotation = Quaternion.Euler(90f, model.rotation.eulerAngles.y, model.rotation.eulerAngles.z);
 
-        if(isDead && otherPlayer.gameObject.GetComponent<PlayerController>().isDead)
+        if (isDead && otherPlayer.gameObject.GetComponent<PlayerController>().isDead)
         {
             GameManager.Instance.ReloadLevel();
         }
     }
     public void levelReset()
     {
+        model.transform.rotation = Quaternion.identity;
+        animator.SetInteger("AnimState", 0);
+        moveSpeed = baseSpeed;
         health = maxHealth;
         isDead = false;
         charControl.enabled = false;
