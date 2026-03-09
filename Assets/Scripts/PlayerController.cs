@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +18,9 @@ public class PlayerController : MonoBehaviour
     [Header("Player Settings")]
     [SerializeField] private bool isP1; // P1 = Fire Wizard, P2 = Lightning Wizard
     [SerializeField] public float moveSpeed = 5f;
+    public float maxHealth = 100f;
     public float health = 100f;
+    [SerializeField] private Animator healthAnim;
 
     [Header("Attack Settings - Fire Wizard (P1)")]
     [SerializeField] private FireballProjectile fireballPrefab;
@@ -139,7 +142,21 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        healthBar.UpdateHealthBar(health);
+
+        var healthPercentage = health / maxHealth;
+
+        if ( healthPercentage > 0.66)
+        {
+            healthAnim.SetInteger("AnimState", 0);
+        }
+        else if (healthPercentage > 0.33)
+        {
+            healthAnim.SetInteger("AnimState", 1);
+        }
+        else
+        {
+            healthAnim.SetInteger("AnimState", 2);
+        }
 
         if (health <= 0)
             Die();
