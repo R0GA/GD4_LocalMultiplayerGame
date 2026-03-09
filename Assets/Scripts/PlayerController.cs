@@ -143,10 +143,16 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
+        UpdateHealthUI();
 
+        if (health <= 0)
+            Die();
+    }
+    void UpdateHealthUI()
+    {
         var healthPercentage = health / maxHealth;
 
-        if ( healthPercentage > 0.66)
+        if (healthPercentage > 0.66)
         {
             healthAnim.SetInteger("AnimState", 0);
         }
@@ -158,9 +164,6 @@ public class PlayerController : MonoBehaviour
         {
             healthAnim.SetInteger("AnimState", 2);
         }
-
-        if (health <= 0)
-            Die();
     }
     private IEnumerator ResetAttack()
     {
@@ -182,5 +185,12 @@ public class PlayerController : MonoBehaviour
     public void levelReset()
     {
         health = maxHealth;
+        isDead = false;
+        charControl.enabled = false;
+        Vector3 randomOffset = Random.insideUnitSphere * 1f;
+        randomOffset.y = 1f;
+        transform.position = randomOffset;
+        charControl.enabled = true;
+        UpdateHealthUI();
     }
 }

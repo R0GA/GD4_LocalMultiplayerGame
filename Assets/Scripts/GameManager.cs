@@ -32,12 +32,14 @@ public class GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(levelName);
         player1.levelReset();
         player2.levelReset();
+        Time.timeScale = 1.0f;
     }
     public void ReloadLevel()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
         player1.levelReset();
         player2.levelReset();
+        Time.timeScale = 1.0f;
     }
     public void QuitGame()
     {
