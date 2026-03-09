@@ -72,9 +72,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnPause()
     {
-        if (otherPlayer.gameObject.GetComponent<PlayerController>().isPaused) return;
-
-        if (isPaused) ResumeGame();
+        if (isPaused || otherPlayer.gameObject.GetComponent<PlayerController>().isPaused) ResumeGame();
         else PauseGame();
     }
 
@@ -83,12 +81,6 @@ public class PlayerController : MonoBehaviour
         isPaused = true;
         Time.timeScale = 0f;
         pausePanel.SetActive(true);
-
-        var uiModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
-        uiModule.actionsAsset = playerInput.actions;
-
-        playerInput.SwitchCurrentActionMap("UI");
-        StartCoroutine(SelectAfterDelay(firstSelectedButton?.gameObject));
     }
 
     public void ResumeGame()
@@ -96,20 +88,6 @@ public class PlayerController : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1f;
         pausePanel.SetActive(false);
-
-        playerInput.SwitchCurrentActionMap("Character");
-
-        EventSystem.current.SetSelectedGameObject(null);
-    }
-
-    
-    private IEnumerator SelectAfterDelay(GameObject target)
-    {
-        if (target == null) yield break;
-        EventSystem.current.SetSelectedGameObject(null);
-        yield return new WaitForSecondsRealtime(0.05f);
-        EventSystem.current.SetSelectedGameObject(target);
-        Debug.Log("Selected: " + EventSystem.current.currentSelectedGameObject?.name);
     }
 
     public void Movement()
