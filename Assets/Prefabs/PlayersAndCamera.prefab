@@ -343,7 +343,7 @@ MonoBehaviour:
   fireballSpawnPoint: {fileID: 1459523237612948952}
   fireballCooldown: 0.5
   lightningAttack: {fileID: 0}
-  healthBar: {fileID: 7308904924233392187}
+  healthBar: {fileID: 0}
 --- !u!114 &5572231392019836513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1024,7 +1024,7 @@ MonoBehaviour:
   fireballSpawnPoint: {fileID: 0}
   fireballCooldown: 0.5
   lightningAttack: {fileID: 2610805405509874662}
-  healthBar: {fileID: 8972570329734667365}
+  healthBar: {fileID: 0}
 --- !u!114 &7658920005762388629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1788,33 +1788,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2c582029726b324dbfdda38ae169129, type: 3}
---- !u!114 &7308904924233392187 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6319358508837501611, guid: d2c582029726b324dbfdda38ae169129, type: 3}
-  m_PrefabInstance: {fileID: 3664994794495613584}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c063d064873e81f4c8b9b1b799ee145f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
 --- !u!224 &8791037917353167348 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5250255091604280164, guid: d2c582029726b324dbfdda38ae169129, type: 3}
   m_PrefabInstance: {fileID: 3664994794495613584}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8972570329734667365 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5645354998282471157, guid: d2c582029726b324dbfdda38ae169129, type: 3}
-  m_PrefabInstance: {fileID: 3664994794495613584}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c063d064873e81f4c8b9b1b799ee145f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
 --- !u!1001 &4287436542148425314
 PrefabInstance:
   m_ObjectHideFlags: 0
