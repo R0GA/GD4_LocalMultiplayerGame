@@ -1342,6 +1342,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5901255194618828620}
+  - component: {fileID: 5721610138532595413}
   m_Layer: 0
   m_Name: PlayersAndCamera
   m_TagString: Untagged
@@ -1370,6 +1371,20 @@ Transform:
   - {fileID: 8791037917353167348}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5721610138532595413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7516991092429973207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96148e59a3e8286419855970b985e9fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  player1: {fileID: 5958833932087591675}
+  player2: {fileID: 5636540506239775047}
 --- !u!1 &7969651408516142803
 GameObject:
   m_ObjectHideFlags: 0

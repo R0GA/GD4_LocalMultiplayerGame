@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public float maxHealth = 100f;
     public float health = 100f;
     [SerializeField] private Animator healthAnim;
+    private bool isDead = false;
 
     [Header("Attack Settings - Fire Wizard (P1)")]
     [SerializeField] private FireballProjectile fireballPrefab;
@@ -170,6 +171,16 @@ public class PlayerController : MonoBehaviour
     private void Die()
     {
         //Add death stuff here
+        isDead = true;
         Debug.Log($"{gameObject.name} has died.");
+
+        if(isDead && otherPlayer.gameObject.GetComponent<PlayerController>().isDead)
+        {
+            GameManager.Instance.ReloadLevel();
+        }
+    }
+    public void levelReset()
+    {
+        health = maxHealth;
     }
 }
