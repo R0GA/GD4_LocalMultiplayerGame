@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Start.unity
+    guid: 96286e300e914834cb7e203e8eefb0da
+  - enabled: 1
+    path: Assets/Scenes/Levels/IntroCutScene.unity
+    guid: 2640d8a1bd0dc8a4fac765cea194d86f
+  - enabled: 1
     path: Assets/Scenes/Levels/IntroLevel.unity
     guid: 0b6d44222a1d0fb4dacf289b9f5a738f
   - enabled: 1
@@ -20,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/LabScene.unity
     guid: fe0f7aeb002363d46bdc5437abf456b0
+  - enabled: 1
+    path: Assets/Scenes/Levels/WizardsRoom.unity
+    guid: 87e2c586f90c18f4e82b73dd1b79de8f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 0c05ab8217b742941ad4ff979dcae3bd, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

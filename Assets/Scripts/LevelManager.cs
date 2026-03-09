@@ -21,9 +21,9 @@ public class LevelManager : MonoBehaviour
         GameManager.Instance.player1.isDead = true;
         GameManager.Instance.player2.isDead = true; 
         GameEndText.SetActive(true);
-        yield return new WaitForSecondsRealtime(5);
+        yield return new WaitForSecondsRealtime(7);
         EndScreen.SetActive(true);
-        yield return new WaitForSecondsRealtime(5);
+        yield return new WaitForSecondsRealtime(7);
         GameManager.Instance.LoadLevel(nextLevel);
     }
 }

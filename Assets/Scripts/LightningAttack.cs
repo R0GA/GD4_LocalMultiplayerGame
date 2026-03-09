@@ -125,6 +125,16 @@ public class LightningAttack : MonoBehaviour
         return best;
     }
 
+
+    /*
+    Title: Lightning Visualization
+    Author: Claude AI
+    Date: 3/9/2026
+    Code version: 1
+    Availability: N/A (Claude Generated)
+    Note: Specifically the following lightning method and Gizmo Draws
+    */
+
     // ---- Lightning Visualization ----
 
     /// <summary>

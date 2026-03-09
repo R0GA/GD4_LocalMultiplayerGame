@@ -1,6 +1,16 @@
+using Mono.Cecil.Cil;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
+using static Unity.VisualScripting.Member;
+
+/*
+Title: Creature Controller
+Author: Davies, R.
+Date: 3/9/2026
+Code version: 1
+Availability: N/A (Previously Submitted Project - 3rd year final)
+*/
 
 public class CreatureController : MonoBehaviour
 {
