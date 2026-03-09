@@ -25,10 +25,13 @@ public class CreatureController : MonoBehaviour
     [SerializeField] private GameObject deathVFXPrefab;
     [SerializeField] private float deathVFXDuration = 2f;
 
+    [SerializeField] private Animator animator;
+    private bool isAttacking = false;
     private NavMeshAgent navMeshAgent;
     private Transform currentTarget;
     private bool isInCombat = false;
     private float lastAttackTime = 0f;
+    private float lastAnimAttackTime = 0f;
     private bool isDead = false;
 
     private void Awake()
@@ -54,6 +57,15 @@ public class CreatureController : MonoBehaviour
 
         FindTarget();
         HandleCombatBehavior();
+
+        if (!isAttacking && navMeshAgent.velocity.magnitude > 0.1f)
+        {
+            animator.SetInteger("AnimState", 1);
+        }
+        else if (!isAttacking)
+        {
+            animator.SetInteger("AnimState", 0);
+        }
     }
 
     private void FindTarget()
@@ -208,6 +220,7 @@ public class CreatureController : MonoBehaviour
                 Quaternion.identity
             );
             projectile.Initialize(attackDamage, currentTarget);
+            StartCoroutine(MeleeAttackAnimation());
         }
         else
         {
@@ -219,30 +232,26 @@ public class CreatureController : MonoBehaviour
 
     private IEnumerator MeleeAttackAnimation()
     {
-        Vector3 originalPosition = transform.position;
-        if (currentTarget != null)
+        Debug.Log("Melee Attack Triggered");
+        if (!isAttacking)
         {
-            Vector3 attackDirection = (currentTarget.position - transform.position).normalized * 0.3f;
-            float attackTime = 0.1f;
-            float elapsedTime = 0f;
-
-            while (elapsedTime < attackTime)
-            {
-                transform.position = Vector3.Lerp(originalPosition, originalPosition + attackDirection, elapsedTime / attackTime);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            elapsedTime = 0f;
-            while (elapsedTime < attackTime)
-            {
-                transform.position = Vector3.Lerp(originalPosition + attackDirection, originalPosition, elapsedTime / attackTime);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            transform.position = originalPosition;
+            Debug.Log("Melee Attack Animation Started");
+            isAttacking = true;
+            animator.SetInteger("AnimState", 2);
+            Vector3 originalPosition = transform.position;
+            StartCoroutine(ResetAnim());
+            yield return null;
         }
+    }
+    private IEnumerator ResetAnim()
+    {
+        Debug.Log("ResetAnim Coroutine Started");
+
+        yield return new WaitUntil(() => Time.time >= lastAttackTime + 1f / attackSpeed || Time.time > lastAttackTime + 0.5f);
+        Debug.Log("ResetAnim Coroutine Executing");
+        animator.SetInteger("AnimState", 0);
+        isAttacking = false;
+        lastAnimAttackTime = Time.time;  
     }
 
     public void TakeDamage(float damage)

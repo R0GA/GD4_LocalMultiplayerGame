@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,11 +13,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CharacterController charControl;
     [SerializeField] private Transform otherPlayer;
     [SerializeField] private Animator animator;
+    [SerializeField] private Transform model;
 
     [Header("Player Settings")]
     [SerializeField] private bool isP1; // P1 = Fire Wizard, P2 = Lightning Wizard
     [SerializeField] public float moveSpeed = 5f;
+    public float maxHealth = 100f;
     public float health = 100f;
+    [SerializeField] private Animator healthAnim;
+    private bool isDead = false;
 
     [Header("Attack Settings - Fire Wizard (P1)")]
     [SerializeField] private FireballProjectile fireballPrefab;
@@ -56,7 +61,14 @@ public class PlayerController : MonoBehaviour
         Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
         //move = transform.TransformDirection(move);
         charControl.Move(move * moveSpeed * Time.deltaTime);
-        
+        model.transform.position = transform.position;
+
+        if (moveInput.sqrMagnitude > 0.1f)
+        {
+            Vector3 lookDir = new Vector3(moveInput.x, 0f, moveInput.y);
+            model.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        }
+
         if (!isAttacking && charControl.velocity.magnitude > 0.1f)
         {
             animator.SetInteger("AnimState", 1);
@@ -131,7 +143,21 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        healthBar.UpdateHealthBar(health);
+
+        var healthPercentage = health / maxHealth;
+
+        if ( healthPercentage > 0.66)
+        {
+            healthAnim.SetInteger("AnimState", 0);
+        }
+        else if (healthPercentage > 0.33)
+        {
+            healthAnim.SetInteger("AnimState", 1);
+        }
+        else
+        {
+            healthAnim.SetInteger("AnimState", 2);
+        }
 
         if (health <= 0)
             Die();
@@ -145,6 +171,16 @@ public class PlayerController : MonoBehaviour
     private void Die()
     {
         //Add death stuff here
+        isDead = true;
         Debug.Log($"{gameObject.name} has died.");
+
+        if(isDead && otherPlayer.gameObject.GetComponent<PlayerController>().isDead)
+        {
+            GameManager.Instance.ReloadLevel();
+        }
+    }
+    public void levelReset()
+    {
+        health = maxHealth;
     }
 }
