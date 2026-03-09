@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/RowynnTestScene.unity
+    guid: aec45a3f3186b364791bd3df27350812
+  - enabled: 1
+    path: Assets/Scenes/LoadTest.unity
+    guid: e32d1936f3889e34d88f3e651f38fd8d
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 0c05ab8217b742941ad4ff979dcae3bd, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
