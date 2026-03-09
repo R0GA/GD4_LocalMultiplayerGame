@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -42,9 +45,14 @@ public class PlayerController : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private Button firstSelectedButton;
+
+    public bool isPaused = false;
 
     private void Start()
     {
+        playerInput.SwitchCurrentActionMap("Character");
         baseSpeed = moveSpeed;
 
         playerInput.actions["Movement"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
@@ -54,12 +62,54 @@ public class PlayerController : MonoBehaviour
         playerInput.actions["Look"].canceled += ctx => lookInput = Vector2.zero;
 
         playerInput.actions["Attack"].performed += ctx => Attack();
+        playerInput.actions["Pause"].performed += ctx => OnPause();
     }
 
     private void Update()
     {
         Movement();
         Look();
+    }
+    private void OnPause()
+    {
+        if (otherPlayer.gameObject.GetComponent<PlayerController>().isPaused) return;
+
+        if (isPaused) ResumeGame();
+        else PauseGame();
+    }
+
+    public void PauseGame()
+    {
+        isPaused = true;
+        Time.timeScale = 0f;
+        pausePanel.SetActive(true);
+
+        var uiModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
+        uiModule.actionsAsset = playerInput.actions;
+
+        playerInput.SwitchCurrentActionMap("UI");
+        StartCoroutine(SelectAfterDelay(firstSelectedButton?.gameObject));
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        pausePanel.SetActive(false);
+
+        playerInput.SwitchCurrentActionMap("Character");
+
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    
+    private IEnumerator SelectAfterDelay(GameObject target)
+    {
+        if (target == null) yield break;
+        EventSystem.current.SetSelectedGameObject(null);
+        yield return new WaitForSecondsRealtime(0.05f);
+        EventSystem.current.SetSelectedGameObject(target);
+        Debug.Log("Selected: " + EventSystem.current.currentSelectedGameObject?.name);
     }
 
     public void Movement()
@@ -204,6 +254,9 @@ public class PlayerController : MonoBehaviour
     }
     public void levelReset()
     {
+        Time.timeScale = 1f;
+        isPaused = false;
+        playerInput.SwitchCurrentActionMap("Character");
         model.transform.rotation = Quaternion.identity;
         animator.SetInteger("AnimState", 0);
         moveSpeed = baseSpeed;
