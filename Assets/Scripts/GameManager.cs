@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        currentLevel = scene.name;
         endUi = GameObject.FindGameObjectWithTag("EndUI");
         endUi.SetActive(false);
     }
