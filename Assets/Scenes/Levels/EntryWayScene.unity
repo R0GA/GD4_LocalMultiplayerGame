@@ -443,7 +443,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 16e1b3d37c0fed449aaf16d9216c22d7, type: 3}
 --- !u!1 &340000785 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 3211995004371109812, guid: 16e1b3d37c0fed449aaf16d9216c22d7, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2100564185369643811, guid: 16e1b3d37c0fed449aaf16d9216c22d7, type: 3}
   m_PrefabInstance: {fileID: 340000784}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &379385017
@@ -475,10 +475,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f1cf82598a3e284c9a78a3339d4f5b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  levelNumber: 3
+  levelNumber: 2
   GameEndText: {fileID: 1487311800}
   EndScreen: {fileID: 340000785}
-  nextLevel: LabScene
+  nextLevel: LibraryScene
 --- !u!4 &379385019
 Transform:
   m_ObjectHideFlags: 0
@@ -1473,8 +1473,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1066648097257938827, guid: 270417994da95c74b95735400c1a5b03, type: 3}
       propertyPath: m_text
-      value: "ZoooWeeee Mama! Those Chemicals had me Dizzy! \nLets go get that big
-        hatted bozo!"
+      value: 'Good Lordy! Those webs were so sticky and icky!
+
+        Lets get out
+        of here, i feel gunky!'
       objectReference: {fileID: 0}
     - target: {fileID: 2012943635598929735, guid: 270417994da95c74b95735400c1a5b03, type: 3}
       propertyPath: m_CullTransparentMesh

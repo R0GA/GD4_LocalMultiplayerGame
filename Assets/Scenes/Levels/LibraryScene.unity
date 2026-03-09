@@ -761,12 +761,14 @@ PrefabInstance:
       propertyPath: m_CullTransparentMesh
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2117642729427068193, guid: 270417994da95c74b95735400c1a5b03, type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3370549825069994326, guid: 270417994da95c74b95735400c1a5b03, type: 3}
       propertyPath: m_text
-      value: 'Good Lordy! Those webs were so sticky and icky!
-
-        Lets get out
-        of here, i feel gunky!'
+      value: "Since when did Goblins know magic? Those fireballs hurt... \nNot as
+        much as mine though :)"
       objectReference: {fileID: 0}
     - target: {fileID: 4526590785352048682, guid: 270417994da95c74b95735400c1a5b03, type: 3}
       propertyPath: m_IsActive

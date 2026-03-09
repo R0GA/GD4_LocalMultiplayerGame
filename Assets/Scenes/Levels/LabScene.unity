@@ -646,7 +646,7 @@ MonoBehaviour:
   levelNumber: 4
   GameEndText: {fileID: 8005862552903035977}
   EndScreen: {fileID: 1585707998}
-  nextLevel: 
+  nextLevel: WizardsRoom
 --- !u!1 &1008627812
 GameObject:
   m_ObjectHideFlags: 0
