@@ -6,10 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     [Header("Game Settings")]
-    [SerializeField] private PlayerController player1;
-    [SerializeField] private PlayerController player2;
+    [SerializeField] public PlayerController player1;
+    [SerializeField] public PlayerController player2;
     private string currentLevel = "MainMenu";
-    private GameObject endUi;
 
     void Awake()
     {
@@ -52,12 +51,22 @@ public class GameManager : MonoBehaviour
     public void EndLevel()
     {
         Time.timeScale = 0.0f;
-        endUi.SetActive(true);
     }
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         currentLevel = scene.name;
-        endUi = GameObject.FindGameObjectWithTag("EndUI");
-        endUi.SetActive(false);
+    }
+    public void UnPause()
+    {
+        if (!player1.isPaused && !player2.isPaused) return;
+
+        if(player1.isPaused)
+        {
+            player1.OnPause();
+        }
+        else
+        {
+            player2.OnPause();
+        }
     }
 }

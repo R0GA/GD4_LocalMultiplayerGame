@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3591796062668833695}
   - component: {fileID: 8383511890647319632}
   m_Layer: 7
-  m_Name: Enemy
+  m_Name: EnemyRanged
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,17 +150,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 494c4288fda31fe49a4d6f64adf6d256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureController
-  isMelee: 1
-  detectionRange: 5
-  attackRange: 2
-  rangedOptimalDistance: 5
+  isMelee: 0
+  detectionRange: 10
+  attackRange: 6
+  rangedOptimalDistance: 4
   stoppingDistance: 1.5
   projectilePrefab: {fileID: 4744997331139293221, guid: 84f041c9730460a4e814cf804923a866, type: 3}
   projectileSpawnPoint: {fileID: 6906441205220010624}
-  health: 100
+  health: 60
   attackDamage: 5
   speed: 3
-  attackSpeed: 1
+  attackSpeed: 0.7
   deathVFXPrefab: {fileID: 0}
   deathVFXDuration: 2
   animator: {fileID: 5232177514783177142}
