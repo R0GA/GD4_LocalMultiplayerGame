@@ -220,6 +220,7 @@ public class CreatureController : MonoBehaviour
                 Quaternion.identity
             );
             projectile.Initialize(attackDamage, currentTarget);
+            StartCoroutine(MeleeAttackAnimation());
         }
         else
         {
