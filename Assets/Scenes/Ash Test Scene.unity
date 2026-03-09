@@ -823,6 +823,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -784
       objectReference: {fileID: 0}
+    - target: {fileID: 7073508145934056096, guid: fc0789f4893b98c4cbff896854cf684e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4d535ac787564934287a373b1222d4ea, type: 3}
     - target: {fileID: 7516991092429973207, guid: fc0789f4893b98c4cbff896854cf684e, type: 3}
       propertyPath: m_Name
       value: PlayersAndCamera
@@ -841,6 +845,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7969651408516142803, guid: fc0789f4893b98c4cbff896854cf684e, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8406208602742258416, guid: fc0789f4893b98c4cbff896854cf684e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ef4af2d1a589e344ebba3ecb2abfbee4, type: 3}
+    - target: {fileID: 8406208602742258416, guid: fc0789f4893b98c4cbff896854cf684e, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8759935794894501978, guid: fc0789f4893b98c4cbff896854cf684e, type: 3}
