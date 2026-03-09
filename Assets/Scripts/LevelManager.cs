@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private int levelNumber;
     [SerializeField] private GameObject GameEndText;
     [SerializeField] private GameObject EndScreen;
-    [SerializeField] private SceneAsset nextLevel;
+    [SerializeField] private string nextLevel;
 
     public void EndLevel()
     {
@@ -24,6 +24,6 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(5);
         EndScreen.SetActive(true);
         yield return new WaitForSecondsRealtime(5);
-        GameManager.Instance.LoadLevel(nextLevel.name);
+        GameManager.Instance.LoadLevel(nextLevel);
     }
 }
