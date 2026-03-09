@@ -1191,7 +1191,7 @@ MonoBehaviour:
   levelNumber: 3
   GameEndText: {fileID: 659090164}
   EndScreen: {fileID: 1311166128}
-  nextLevel: {fileID: 102900000, guid: fe0f7aeb002363d46bdc5437abf456b0, type: 3}
+  nextLevel: LabScene
 --- !u!4 &1089570901
 Transform:
   m_ObjectHideFlags: 0
