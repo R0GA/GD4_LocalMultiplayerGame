@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     public float maxHealth = 100f;
     public float health = 100f;
     [SerializeField] private Animator healthAnim;
-    private bool isDead = false;
+    public bool isDead = false;
 
     [Header("Attack Settings - Fire Wizard (P1)")]
     [SerializeField] private FireballProjectile fireballPrefab;
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
         Movement();
         Look();
     }
-    private void OnPause()
+    public void OnPause()
     {
         if (otherPlayer.gameObject.GetComponent<PlayerController>().isPaused) return;
 
