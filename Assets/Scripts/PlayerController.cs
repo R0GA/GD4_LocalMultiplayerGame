@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        playerInput.SwitchCurrentActionMap("Character");
+       // playerInput.SwitchCurrentActionMap("Character");
         baseSpeed = moveSpeed;
 
         playerInput.actions["Movement"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
@@ -62,7 +62,8 @@ public class PlayerController : MonoBehaviour
         playerInput.actions["Look"].canceled += ctx => lookInput = Vector2.zero;
 
         playerInput.actions["Attack"].performed += ctx => Attack();
-        playerInput.actions["Pause"].performed += ctx => OnPause();
+        playerInput.actions["Pause"].performed -= OnPausePerformed;
+        playerInput.actions["Pause"].performed += OnPausePerformed;
     }
 
     private void Update()
@@ -70,10 +71,11 @@ public class PlayerController : MonoBehaviour
         Movement();
         Look();
     }
-    public void OnPause()
+    public void OnPausePerformed(InputAction.CallbackContext ctx)
     {
         if (isPaused || otherPlayer.gameObject.GetComponent<PlayerController>().isPaused) ResumeGame();
         else PauseGame();
+        Debug.Log($"Pause Button Pressed {isPaused} {otherPlayer.gameObject.GetComponent<PlayerController>().isPaused}");
     }
 
     public void PauseGame()
